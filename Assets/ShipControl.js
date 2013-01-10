@@ -13,7 +13,8 @@ public var cameraobj : GameObject;
 private var mouse_diff : float;
 
 public var ship_engine_object : GameObject;
-public var ship_weapon_object : GameObject;
+public var ship_weapon_object1 : GameObject;
+public var ship_weapon_object2 : GameObject;
 public var ship_projectile_prefab : GameObject;
 public var shot_force : float;
 public var shot_frequency : float;
@@ -57,7 +58,6 @@ function FixedUpdate () {
 	}
 
 	var add_torque_value = mouse_diff * ship_turn_force;
-	// Debug.Log(add_torque_value);
 	rigidbody.AddTorque(Vector3(0, add_torque_value, 0));
 
 }
@@ -74,9 +74,14 @@ function EmitParticles (particle_system_object : GameObject) {
 function Shoot () {
 	if (Input.GetButton("Fire1")) {
 		if (time_since_shot >= (1 / shot_frequency)) {
-			var position = ship_weapon_object.transform.position;
-			position.y = 0;
-			var clone = Instantiate(ship_projectile_prefab, position, Quaternion.identity);
+			var position1 = ship_weapon_object1.transform.position;
+			var position2 = ship_weapon_object2.transform.position;
+			position1.y = 0;
+			position2.y = 0;
+			var clone = Instantiate(ship_projectile_prefab, position1, transform.rotation);
+			clone.rigidbody.velocity = rigidbody.velocity;
+			clone.rigidbody.AddForce(transform.forward * shot_force);
+			clone = Instantiate(ship_projectile_prefab, position2, transform.rotation);
 			clone.rigidbody.velocity = rigidbody.velocity;
 			clone.rigidbody.AddForce(transform.forward * shot_force);
 			time_since_shot = 0;
