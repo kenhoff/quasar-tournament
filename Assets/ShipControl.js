@@ -49,6 +49,10 @@ function Rotate (change_heading : float) {
 }
 
 function Maneuver (horizontal_input : float, vertical_input : float) {
-	rigidbody.AddForce(Vector3.right * horizontal_input * ship_maneuver_force);
-	rigidbody.AddForce(Vector3.forward * vertical_input * ship_maneuver_force);
+	rigidbody.AddForce(Vector3.right * horizontal_input * ship_maneuver_force * Time.deltaTime);
+	rigidbody.AddForce(Vector3.forward * vertical_input * ship_maneuver_force * Time.deltaTime);
+}
+
+function Stabilize () {
+	rigidbody.AddForce(-rigidbody.velocity * ship_maneuver_force * .01);
 }

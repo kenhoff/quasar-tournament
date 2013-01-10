@@ -37,8 +37,9 @@ function Update () {
 
     var worldPos = camera_object.camera.ScreenToWorldPoint(Vector3(Input.mousePosition.x, Input.mousePosition.y, cameraDif));
 
-    Debug.DrawLine(camera_object.transform.position, worldPos);
-    Debug.DrawRay(transform.position, transform.forward * 5, Color.blue);
+    // Debug.DrawLine(camera_object.transform.position, worldPos);
+    // Debug.DrawRay(ship.transform.position, ship.transform.forward * 5, Color.blue);
+    Debug.DrawRay(ship.transform.position, ship.rigidbody.velocity);
 
     var diff = worldPos - ship.transform.position;
     var theta =  Mathf.Atan2(diff.x, diff.z) * Mathf.Rad2Deg;
@@ -58,10 +59,14 @@ function FixedUpdate () {
 		ship_control_script.Thrust();
 	}
 
+	if (Input.GetKey(KeyCode.X)) {
+		ship_control_script.Stabilize();
+	}
+
 	ship_control_script.Rotate(change_heading);
 
-	var vertical_input = Input.GetAxis("Vertical") * Time.deltaTime;
-	var horizontal_input = Input.GetAxis("Horizontal") * Time.deltaTime;
+	var vertical_input = Input.GetAxis("Vertical");
+	var horizontal_input = Input.GetAxis("Horizontal");
 
 	ship_control_script.Maneuver(horizontal_input, vertical_input);
 }

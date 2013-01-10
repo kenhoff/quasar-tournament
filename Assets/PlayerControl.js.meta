@@ -2,7 +2,9 @@ fileFormatVersion: 2
 guid: 809b8e11a5ff0c34d96ec3d8b892c571
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - ship_prefab: {fileID: 100000, guid: 7f75f65c79739b843a2530559284e79b, type: 2}
+  - camera_object: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
