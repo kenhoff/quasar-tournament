@@ -2,6 +2,7 @@
 
 public var ship_turn_force : float;
 public var ship_thrust_force : float;
+public var ship_maneuver_force : float;
 
 private var worldPos : Vector3;
 private var mouseX : int;
@@ -54,11 +55,16 @@ function Update () {
 
 function FixedUpdate () {
 	if (Input.GetButton("Fire2")) {
-		rigidbody.AddForce((worldPos - transform.position).normalized * ship_thrust_force);
+		rigidbody.AddForce(transform.forward * ship_thrust_force * Time.deltaTime);
 	}
 
-	var add_torque_value = mouse_diff * ship_turn_force;
+	var add_torque_value = mouse_diff * ship_turn_force * Time.deltaTime;
 	rigidbody.AddTorque(Vector3(0, add_torque_value, 0));
+	var vertical_force = Input.GetAxis("Vertical") * ship_maneuver_force * Time.deltaTime;
+	var horizontal_force = Input.GetAxis("Horizontal") * ship_maneuver_force * Time.deltaTime;
+
+	rigidbody.AddForce(Vector3.right * horizontal_force);
+	rigidbody.AddForce(Vector3.forward * vertical_force);
 
 }
 
@@ -84,6 +90,9 @@ function Shoot () {
 			clone = Instantiate(ship_projectile_prefab, position2, transform.rotation);
 			clone.rigidbody.velocity = rigidbody.velocity;
 			clone.rigidbody.AddForce(transform.forward * shot_force);
+			
+			rigidbody.AddForce(-transform.forward * shot_force * 2);
+
 			time_since_shot = 0;
 		}
 	}
