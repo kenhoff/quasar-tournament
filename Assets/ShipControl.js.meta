@@ -2,7 +2,12 @@ fileFormatVersion: 2
 guid: ee5c2b5753aca0f48886d8f8d51c9b60
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - cameraobj: {instanceID: 0}
+  - ship_engine_object: {instanceID: 0}
+  - ship_weapon_object: {instanceID: 0}
+  - ship_projectile_prefab: {fileID: 100000, guid: 96287dbb03e736c4ea90a834fecee3c0,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -13,6 +13,12 @@ public var cameraobj : GameObject;
 private var mouse_diff : float;
 
 public var ship_engine_object : GameObject;
+public var ship_weapon_object : GameObject;
+public var ship_projectile_prefab : GameObject;
+public var shot_force : float;
+public var shot_frequency : float;
+
+private var time_since_shot : float = 0;
 
 function Start () {
 
@@ -39,7 +45,9 @@ function Update () {
 
     EmitParticles(ship_engine_object);
 
-    Debug.Log(ship_engine_object.particleSystem.isPlaying);
+    Shoot();
+
+    
 
 }
 
@@ -61,4 +69,18 @@ function EmitParticles (particle_system_object : GameObject) {
 	else {
 		particle_system_object.particleSystem.enableEmission = false;
 	}
+}
+
+function Shoot () {
+	if (Input.GetButton("Fire1")) {
+		if (time_since_shot >= (1 / shot_frequency)) {
+			var position = ship_weapon_object.transform.position;
+			position.y = 0;
+			var clone = Instantiate(ship_projectile_prefab, position, Quaternion.identity);
+			clone.rigidbody.velocity = rigidbody.velocity;
+			clone.rigidbody.AddForce(transform.forward * shot_force);
+			time_since_shot = 0;
+		}
+	}
+	time_since_shot += Time.deltaTime;
 }
