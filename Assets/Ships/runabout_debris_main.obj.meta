@@ -1,0 +1,83 @@
+fileFormatVersion: 2
+guid: 1a3ab87e44abd9a4e8e207c5055485b4
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_cockpit
+    100004: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_melting
+    100006: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG
+    100008: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_melting.jpg
+    100010: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_NONE
+    400000: //RootNode
+    400002: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_cockpit
+    400004: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_melting
+    400006: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG
+    400008: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_melting.jpg
+    400010: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_NONE
+    2300000: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_cockpit
+    2300002: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_melting
+    2300004: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG
+    2300006: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_melting.jpg
+    2300008: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_NONE
+    3300000: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_cockpit
+    3300002: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_melting
+    3300004: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG
+    3300006: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_melting.jpg
+    3300008: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_NONE
+    4300000: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_cockpit
+    4300002: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_melting
+    4300004: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG
+    4300006: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_melting.jpg
+    4300008: runabout_debris_main_Runabout_Ship_Metal1_metal2.JPG_Metal1_metal2.JPG_NONE
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 
