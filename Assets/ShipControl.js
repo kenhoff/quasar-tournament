@@ -9,6 +9,7 @@ public var shot_frequency : float;
 public var ship_engine_object : GameObject;
 public var ship_weapon_object1 : GameObject;
 public var ship_weapon_object2 : GameObject;
+public var ship_shield_object : GameObject;
 public var ship_projectile_prefab : GameObject;
 
 
@@ -56,3 +57,4 @@ function Maneuver (horizontal_input : float, vertical_input : float) {
 function Stabilize () {
 	rigidbody.AddForce(-rigidbody.velocity * ship_maneuver_force * .01);
 }
+
