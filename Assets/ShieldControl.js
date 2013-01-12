@@ -1,30 +1,27 @@
 #pragma strict
 
+private var fade_rate : float = .05;
+
 function Start () {
 
 }
 
 function Update () {
-	Debug.Log(renderer.material.color);
-	Debug.Log(collider);
+	if (renderer.material.color.a > 1) {
+		renderer.material.color.a = 1;
+	}
+	if (renderer.material.color.a > 0) {
+		renderer.material.color.a -= fade_rate;
+	}
+	if (renderer.material.color.a < 0) {
+		renderer.material.color.a = 0;
+	}
+	
 }
 
-function OnCollisionStay (collision : Collision) {
-	Debug.Log("hello");
-}
-function OnCollisionEnter(collision : Collision) {
-	Debug.Log("hello");
-
-}
-function OnCollisionExit (collision : Collision) {
-	Debug.Log("hello");
+function FlashOn () {
+	renderer.material.color.a += fade_rate * 5;
 }
 
-function OnTriggerStay () {
-	Debug.Log("trigger");
-}
-function OnTriggerEnter () {
-	Debug.Log("trigger");
-}function OnTriggerExit () {
-	Debug.Log("trigger");
+function FlashOff () {
 }

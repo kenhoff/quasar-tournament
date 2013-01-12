@@ -12,10 +12,22 @@ public var ship_weapon_object2 : GameObject;
 public var ship_shield_object : GameObject;
 public var ship_projectile_prefab : GameObject;
 
+private var shield_control_script : ShieldControl;
 
 private var time_since_shot : float = 0;
 
 private var particles_count : int = 150;
+
+function Start () {
+	shield_control_script = ship_shield_object.GetComponent(ShieldControl);
+}
+
+function OnCollisionEnter () {
+	shield_control_script.FlashOn();
+}
+
+function OnCollisionExit () {
+}
 
 function Shoot () {
 	if (time_since_shot >= (1 / shot_frequency)) {
@@ -23,14 +35,18 @@ function Shoot () {
 		var position2 = ship_weapon_object2.transform.position;
 		position1.y = 0;
 		position2.y = 0;
+
 		var clone = Instantiate(ship_projectile_prefab, position1, transform.rotation);
 		clone.transform.parent = ship_weapon_object1.transform;
 		clone.rigidbody.velocity = rigidbody.velocity;
 		clone.rigidbody.AddForce(transform.forward * shot_force);
+		Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
+
 		clone = Instantiate(ship_projectile_prefab, position2, transform.rotation);
 		clone.transform.parent = ship_weapon_object2.transform;
 		clone.rigidbody.velocity = rigidbody.velocity;
 		clone.rigidbody.AddForce(transform.forward * shot_force);
+		Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
 		
 		rigidbody.AddForce(-transform.forward * shot_force * 2);
 
