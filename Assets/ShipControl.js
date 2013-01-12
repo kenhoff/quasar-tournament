@@ -12,6 +12,8 @@ public var ship_weapon_object2 : GameObject;
 public var ship_shield_object : GameObject;
 public var ship_projectile_prefab : GameObject;
 
+public var accuracy : float;
+
 private var shield_control_script : ShieldControl;
 
 private var time_since_shot : float = 0;
@@ -36,16 +38,21 @@ function Shoot () {
 		position1.y = 0;
 		position2.y = 0;
 
+		var firing_angle1 : float = Random.Range(-accuracy, accuracy);
+		var firing_angle2 : float = Random.Range(-accuracy, accuracy);
+
 		var clone = Instantiate(ship_projectile_prefab, position1, transform.rotation);
+		clone.transform.eulerAngles.y += firing_angle1;
 		clone.transform.parent = ship_weapon_object1.transform;
 		clone.rigidbody.velocity = rigidbody.velocity;
-		clone.rigidbody.AddForce(transform.forward * shot_force);
+		clone.rigidbody.AddForce(clone.transform.forward * shot_force);
 		Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
 
 		clone = Instantiate(ship_projectile_prefab, position2, transform.rotation);
+		clone.transform.eulerAngles.y += firing_angle2;
 		clone.transform.parent = ship_weapon_object2.transform;
 		clone.rigidbody.velocity = rigidbody.velocity;
-		clone.rigidbody.AddForce(transform.forward * shot_force);
+		clone.rigidbody.AddForce(clone.transform.forward * shot_force);
 		Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
 		
 		rigidbody.AddForce(-transform.forward * shot_force * 2);
