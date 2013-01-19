@@ -14,17 +14,43 @@ public var ship_projectile_prefab : GameObject;
 
 public var accuracy : float;
 
+public var shield_health : float;
+public var armor_health : float;
+public var hull_health : float;
+
+public var shield_recharge_time : float;
+private var shield_downtime : float;
+
 private var shield_control_script : ShieldControl;
 
 private var time_since_shot : float = 0;
 
 private var particles_count : int = 150;
 
+
 function Start () {
 	shield_control_script = ship_shield_object.GetComponent(ShieldControl);
 }
 
-function OnCollisionEnter () {
+function Update () {
+	Debug.Log(shield_health);
+	if (shield_health > 100) {
+		shield_health = 100;
+	}
+	else shield_health += Time.deltaTime;
+
+	if (shield_health <= 0) {
+		ship_shield_object.SetActive(false);
+	}
+
+}
+
+function OnCollisionEnter (collisionInfo : Collision) {
+	// Debug.Log(collisionInfo.relativeVelocity.magnitude);
+	var damage = collisionInfo.relativeVelocity.magnitude;
+	if (shield_health < 0) {
+		shield_health -= damage;
+	}
 	shield_control_script.FlashOn();
 }
 
