@@ -6,6 +6,7 @@ public var ship_maneuver_force : float;
 public var shot_force : float;
 public var shot_frequency : float;
 
+// public var ship_body_object : GameObject;
 public var ship_engine_object : GameObject;
 public var ship_weapon_object1 : GameObject;
 public var ship_weapon_object2 : GameObject;
@@ -37,9 +38,14 @@ public var debris_object_prefab : GameObject;
 
 function Start () {
 	shield_control_script = ship_shield_object.GetComponent(ShieldControl);
+	ship_shield_object.SetActive(false);
+	rigidbody.SetDensity(4.5);
+	ship_shield_object.SetActive(true);
 }
 
 function Update () {
+
+	Debug.Log(rigidbody.mass);
 	// Debug.Log(shield_health);
 	if (shield_health > max_shield) {
 		shield_health = max_shield;

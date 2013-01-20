@@ -17,7 +17,7 @@ function Start () {
 
 	// bigger camera area for non-following ship
 
-	if (!follow_ship) camera_zoom = camera_zoom * 2;
+	if (!follow_ship) camera_zoom = camera_zoom * 4;
 }
 
 function CreateShip () {
