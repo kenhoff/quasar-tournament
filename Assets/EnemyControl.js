@@ -22,16 +22,44 @@ function Start () {
 
 function Update () {
 
-	var target_ship = target.transform.GetChild(0);
+	if (!ship) {
+		Destroy(gameObject);
+	}
 
-	var lead_target = target_ship.transform.position + target_ship.rigidbody.velocity;
+	Debug.Log(target);
 
-	var diff = lead_target - ship.transform.position;
-	var theta =  Mathf.Atan2(diff.x, diff.z) * Mathf.Rad2Deg;
+	if (!target) {
+		var list = GameObject.FindGameObjectsWithTag("Enemy");
+		Debug.Log(list.length);
+		
+		for (i in list) {
+			var rando = Mathf.Floor(Random.value * list.length);
+			if (list[rando] == gameObject) {
+				continue;
+			}
+			else {
+				target = list[rando].transform;
+				break;
+			}
+		}
 
-	distance_to_target = diff.magnitude;
+		// target = GameObject.FindWithTag("Enemy").transform;
 
-	change_heading = Mathf.DeltaAngle(ship.transform.eulerAngles.y, theta);
+	}
+
+	if (target)
+	{
+		var target_ship = target.transform.GetChild(0);
+
+		var lead_target = target_ship.transform.position + target_ship.rigidbody.velocity;
+
+		var diff = lead_target - ship.transform.position;
+		var theta =  Mathf.Atan2(diff.x, diff.z) * Mathf.Rad2Deg;
+
+		distance_to_target = diff.magnitude;
+
+		change_heading = Mathf.DeltaAngle(ship.transform.eulerAngles.y, theta);
+	}
 
 	// Debug.Log(change_heading);
 
@@ -39,18 +67,20 @@ function Update () {
 
 function FixedUpdate () {
 
-	// if ((distance_to_target >= in_range) && (Physics.Raycast(ship.transform.position, ship.transform.forward))) {
-	if ((distance_to_target >= in_range) && (Mathf.Abs(change_heading) <= 5)) {
-		ship_control_script.Thrust();
-	}
-	else if (distance_to_target < in_range) {
-		ship_control_script.Shoot();
-		ship_control_script.Stabilize();
-	}
-	else {
-		ship_control_script.Stabilize();
-	}
+	if (target) {
 
-	ship_control_script.Rotate(change_heading);
+		if ((distance_to_target >= in_range) && (Mathf.Abs(change_heading) <= 5)) {
+			ship_control_script.Thrust();
+		}
+		else if (distance_to_target < in_range) {
+			ship_control_script.Shoot();
+			ship_control_script.Stabilize();
+		}
+		else {
+			ship_control_script.Stabilize();
+		}
+
+		ship_control_script.Rotate(change_heading);
+	}
 
 }

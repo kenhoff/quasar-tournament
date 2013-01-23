@@ -45,7 +45,7 @@ function Start () {
 
 function Update () {
 
-	Debug.Log(rigidbody.mass);
+	// Debug.Log(rigidbody.mass);
 	// Debug.Log(shield_health);
 	if (shield_health > max_shield) {
 		shield_health = max_shield;
@@ -91,7 +91,9 @@ function OnCollisionEnter (collisionInfo : Collision) {
 
 	}
 	else shield_health -= damage;
-	shield_control_script.FlashOn();
+	if (ship_shield_object.activeSelf) {
+		shield_control_script.FlashOn();
+	}
 }
 
 function OnCollisionExit () {
@@ -112,15 +114,19 @@ function Shoot () {
 		clone.transform.parent = ship_weapon_object1.transform;
 		clone.rigidbody.velocity = rigidbody.velocity;
 		clone.rigidbody.AddForce(clone.transform.forward * shot_force);
-		Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
+		if (ship_shield_object.activeSelf) {
+			Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
+		}
 
 		clone = Instantiate(ship_projectile_prefab, position2, transform.rotation);
 		clone.transform.eulerAngles.y += firing_angle2;
 		clone.transform.parent = ship_weapon_object2.transform;
 		clone.rigidbody.velocity = rigidbody.velocity;
 		clone.rigidbody.AddForce(clone.transform.forward * shot_force);
-		Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
-		
+		if (ship_shield_object.activeSelf) {
+			Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
+		}
+
 		rigidbody.AddForce(-transform.forward * shot_force * 2);
 
 		time_since_shot = 0;
