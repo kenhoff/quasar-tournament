@@ -1,17 +1,12 @@
 #pragma strict
 
 public var ship_turn_force : float;
-public var ship_thrust_force : float;
 public var ship_maneuver_force : float;
-public var shot_force : float;
-public var shot_frequency : float;
 
-// public var ship_body_object : GameObject;
 public var ship_engine_object : GameObject;
-public var ship_weapon_object1 : GameObject;
-public var ship_weapon_object2 : GameObject;
+public var ship_weapon_root : GameObject;
+
 public var ship_shield_object : GameObject;
-public var ship_projectile_prefab : GameObject;
 
 public var accuracy : float;
 
@@ -19,9 +14,9 @@ public var max_shield : float;
 public var max_armor : float;
 public var max_hull : float;
 
-public var shield_health : float;
-public var armor_health : float;
-public var hull_health : float;
+private var shield_health : float;
+private var armor_health : float;
+private var hull_health : float;
 
 public var shield_recharge_time : float;
 public var shield_recharge_rate : float;
@@ -35,18 +30,25 @@ private var particles_count : int = 150;
 
 public var debris_object_prefab : GameObject;
 
+private var is_player : boolean;
+
 
 function Start () {
 	shield_control_script = ship_shield_object.GetComponent(ShieldControl);
 	ship_shield_object.SetActive(false);
 	rigidbody.SetDensity(4.5);
 	ship_shield_object.SetActive(true);
+	shield_health = max_shield;
+	armor_health = max_armor;
+	hull_health = max_hull;
+
+	if (transform.parent.gameObject.tag == "Player") {
+		is_player = true;
+	}
 }
 
 function Update () {
 
-	// Debug.Log(rigidbody.mass);
-	// Debug.Log(shield_health);
 	if (shield_health > max_shield) {
 		shield_health = max_shield;
 	}
@@ -67,7 +69,6 @@ function Update () {
 	}
 
 	shield_downtime += Time.deltaTime;
-	// Debug.Log(shield_downtime);
 
 	if (hull_health <= 0) {
 		Destroy();
@@ -96,62 +97,29 @@ function OnCollisionEnter (collisionInfo : Collision) {
 	}
 }
 
-function OnCollisionExit () {
-}
-
-function Shoot () {
-	if (time_since_shot >= (1 / shot_frequency)) {
-		var position1 = ship_weapon_object1.transform.position;
-		var position2 = ship_weapon_object2.transform.position;
-		position1.y = 0;
-		position2.y = 0;
-
-		var firing_angle1 : float = Random.Range(-accuracy, accuracy);
-		var firing_angle2 : float = Random.Range(-accuracy, accuracy);
-
-		var clone = Instantiate(ship_projectile_prefab, position1, transform.rotation);
-		clone.transform.eulerAngles.y += firing_angle1;
-		clone.transform.parent = ship_weapon_object1.transform;
-		clone.rigidbody.velocity = rigidbody.velocity;
-		clone.rigidbody.AddForce(clone.transform.forward * shot_force);
-		if (ship_shield_object.activeSelf) {
-			Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
-		}
-
-		clone = Instantiate(ship_projectile_prefab, position2, transform.rotation);
-		clone.transform.eulerAngles.y += firing_angle2;
-		clone.transform.parent = ship_weapon_object2.transform;
-		clone.rigidbody.velocity = rigidbody.velocity;
-		clone.rigidbody.AddForce(clone.transform.forward * shot_force);
-		if (ship_shield_object.activeSelf) {
-			Physics.IgnoreCollision(ship_shield_object.collider, clone.collider);
-		}
-
-		rigidbody.AddForce(-transform.forward * shot_force * 2);
-
-		time_since_shot = 0;
+function Fire () {
+	for (var i = 0; i < ship_weapon_root.transform.childCount; i++) {
+		ship_weapon_root.transform.GetChild(i).GetComponent(WeaponControl).Shoot();
 	}
-	time_since_shot += Time.deltaTime;
 }
 
 function Thrust () {
-	rigidbody.AddForce(transform.forward * ship_thrust_force * Time.deltaTime);
-	ship_engine_object.particleSystem.Emit(particles_count * Time.deltaTime);
-	}
+	ship_engine_object.GetComponent(EngineControl).Thrust();
+}
 
 function Rotate (change_heading : float) {
-	var add_torque_value = change_heading * ship_turn_force * Time.deltaTime;
-	rigidbody.AddTorque(Vector3(0, add_torque_value, 0));
+	ship_engine_object.GetComponent(EngineControl).Rotate(change_heading);
 }
 
 function Maneuver (horizontal_input : float, vertical_input : float) {
-	rigidbody.AddForce(Vector3.right * horizontal_input * ship_maneuver_force * Time.deltaTime);
-	rigidbody.AddForce(Vector3.forward * vertical_input * ship_maneuver_force * Time.deltaTime);
+	ship_engine_object.GetComponent(EngineControl).Maneuver(horizontal_input, vertical_input);
 }
 
 function Stabilize () {
-	rigidbody.AddForce(-rigidbody.velocity * ship_maneuver_force * .01);
+	ship_engine_object.GetComponent(EngineControl).Stabilize;
+
 }
+	
 
 function Destroy () {
 	var debris = Instantiate(debris_object_prefab, transform.position, transform.rotation);
@@ -163,4 +131,13 @@ function Destroy () {
 	}
 	debris.particleSystem.Emit(500);
 	Destroy(gameObject);
+}
+
+
+function OnGUI () {
+	if (is_player) {
+		GUI.Label (Rect (10, 10, 100, 20), "Shield: " + Mathf.Floor(shield_health));
+		GUI.Label (Rect (10, 30, 100, 20), "Armor: " + Mathf.Floor(armor_health));
+		GUI.Label (Rect (10, 50, 100, 20), "Hull: " + Mathf.Floor(hull_health));
+	}
 }

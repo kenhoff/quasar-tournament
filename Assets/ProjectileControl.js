@@ -1,14 +1,17 @@
 #pragma strict
 
-public var life : float;
+public var range : float;
 
 private var time_alive : float;
 
 function Start () {
-	time_alive = life;
+	time_alive = (range / rigidbody.velocity.magnitude);
+	// Debug.Log(rigidbody.velocity.magnitude);
+
 }
 
 function Update () {
+	// Debug.Log(rigidbody.velocity.magnitude);
 	if (time_alive <= 0) {
 		Destroy (gameObject);
 	}

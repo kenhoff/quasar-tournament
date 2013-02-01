@@ -26,11 +26,10 @@ function Update () {
 		Destroy(gameObject);
 	}
 
-	Debug.Log(target);
+	// Debug.Log(target);
 
 	if (!target) {
 		var list = GameObject.FindGameObjectsWithTag("Enemy");
-		Debug.Log(list.length);
 		
 		for (i in list) {
 			var rando = Mathf.Floor(Random.value * list.length);
@@ -43,8 +42,6 @@ function Update () {
 			}
 		}
 
-		// target = GameObject.FindWithTag("Enemy").transform;
-
 	}
 
 	if (target)
@@ -52,7 +49,7 @@ function Update () {
 		var target_ship = target.transform.GetChild(0);
 
 		var lead_target = target_ship.transform.position + target_ship.rigidbody.velocity;
-
+	
 		var diff = lead_target - ship.transform.position;
 		var theta =  Mathf.Atan2(diff.x, diff.z) * Mathf.Rad2Deg;
 
@@ -61,7 +58,6 @@ function Update () {
 		change_heading = Mathf.DeltaAngle(ship.transform.eulerAngles.y, theta);
 	}
 
-	// Debug.Log(change_heading);
 
 }
 
@@ -73,7 +69,7 @@ function FixedUpdate () {
 			ship_control_script.Thrust();
 		}
 		else if (distance_to_target < in_range) {
-			ship_control_script.Shoot();
+			ship_control_script.Fire();
 			ship_control_script.Stabilize();
 		}
 		else {

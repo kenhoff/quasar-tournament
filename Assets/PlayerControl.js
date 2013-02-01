@@ -72,7 +72,7 @@ function Update () {
 function FixedUpdate () {
 
 	if (Input.GetButton("Fire1")) {
-		ship_control_script.Shoot();
+		ship_control_script.Fire();
 	}
 
 	if (Input.GetButton("Fire2")) {
@@ -91,8 +91,3 @@ function FixedUpdate () {
 	ship_control_script.Maneuver(horizontal_input, vertical_input);
 }
 
-function OnGUI () {
-	GUI.Label (Rect (10, 10, 100, 20), "Shield: " + Mathf.Floor(ship_control_script.shield_health));
-	GUI.Label (Rect (10, 30, 100, 20), "Armor: " + Mathf.Floor(ship_control_script.armor_health));
-	GUI.Label (Rect (10, 50, 100, 20), "Hull: " + Mathf.Floor(ship_control_script.hull_health));
-}
