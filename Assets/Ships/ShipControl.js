@@ -35,17 +35,15 @@ private var is_player : boolean;
 
 
 function Start () {
+
+	// Debug.Log("started");
 	shield_control_script = ship_shield_object.GetComponent(ShieldControl);
-	
-	
-	
 	shield_health = max_shield;
 	armor_health = max_armor;
 	hull_health = max_hull;
 
-	if (transform.parent.gameObject.tag == "Player") {
-		is_player = true;
-	}
+	// Debug.Log("set shield stats");
+
 
 
 	// Debug.Log("component : " + rigidbody);
@@ -60,6 +58,14 @@ function Start () {
 	// ship_shield_object.SetActive(true);
 	ship_shield_object.collider.enabled = true;
 	// Debug.Log("mass at the end of start: " + rigidbody.mass);
+	try {
+		if (transform.parent.gameObject.tag == "Player") {
+			is_player = true;
+		}
+	}
+	catch (err) {
+		
+	}
 }
 
 function Update () {
@@ -98,30 +104,31 @@ function Update () {
 }
 
 function OnCollisionEnter (collisionInfo : Collision) {
+	var damage : float;
 
-	var damage = collisionInfo.relativeVelocity.magnitude;
-	if (damage >= shield_health) {
-		var armor_damage = damage - shield_health;
-		shield_health = 0;
-		shield_downtime = 0;
-		if (armor_damage > armor_health) {
-			var hull_damage = armor_damage - armor_health;
-			armor_health = 0;
-			hull_health -= hull_damage;
-		}
-		else armor_health -= armor_damage;
 
+	var impact_velocity = collisionInfo.relativeVelocity.magnitude;
+	var impact_mass = collisionInfo.rigidbody.mass;
+	var impact_momentum = impact_velocity * impact_mass;
+
+	if (collisionInfo.gameObject.tag == "Pulse") {
+		damage = collisionInfo.gameObject.transform.GetComponent(PulseControl).payload;
 	}
-	else shield_health -= damage;
-	if (ship_shield_object.activeSelf) {
-		shield_control_script.FlashOn();
+	else {
+		damage = impact_momentum;
 	}
+
+	Damage (damage);
+
+	// Debug.Log("impact_velocity: " + impact_velocity);
+	// Debug.Log("impact_mass: " + impact_mass);
+	// Debug.Log("damage: " + damage);
+
+	
 }
 
-function Fire () {
-	// for (var i = 0; i < ship_weapon_root.transform.childCount; i++) {
-	ship_weapon_root.GetComponent(WeaponControl).Shoot();
-	
+function Shoot () {
+	ship_weapon_root.GetComponent(WeaponControl).WeaponShoot();	
 }
 
 function Thrust () {
@@ -141,6 +148,24 @@ function Stabilize () {
 
 }
 	
+function Damage (amount : float) {
+	if (amount >= shield_health) {
+		var armor_damage = amount - shield_health;
+		shield_health = 0;
+		shield_downtime = 0;
+		if (armor_damage > armor_health) {
+			var hull_damage = armor_damage - armor_health;
+			armor_health = 0;
+			hull_health -= hull_damage;
+		}
+		else armor_health -= armor_damage;
+
+	}
+	else shield_health -= amount;
+	if (ship_shield_object.activeSelf) {
+		shield_control_script.FlashOn();
+	}
+}
 
 function Destroy () {
 	var debris = Instantiate(debris_object_prefab, transform.position, transform.rotation);
@@ -157,8 +182,8 @@ function Destroy () {
 
 function OnGUI () {
 	if (is_player) {
-		GUI.Label (Rect (10, 10, 100, 20), "Shield: " + Mathf.Floor(shield_health));
-		GUI.Label (Rect (10, 30, 100, 20), "Armor: " + Mathf.Floor(armor_health));
-		GUI.Label (Rect (10, 50, 100, 20), "Hull: " + Mathf.Floor(hull_health));
+		GUI.Label (Rect (10, 10, 200, 20), "Shield: " + Mathf.Floor((shield_health / max_shield) * 100) + "%");
+		GUI.Label (Rect (10, 30, 200, 20), "Armor: " + Mathf.Floor((armor_health / max_armor) * 100) + "%");
+		GUI.Label (Rect (10, 50, 200, 20), "Hull: " + Mathf.Floor((hull_health / max_hull) * 100) + "%");
 	}
 }

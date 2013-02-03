@@ -72,7 +72,7 @@ function Update () {
 function FixedUpdate () {
 
 	if (Input.GetButton("Fire1")) {
-		ship_control_script.Fire();
+		ship_control_script.Shoot();
 	}
 
 	if (Input.GetButton("Fire2")) {

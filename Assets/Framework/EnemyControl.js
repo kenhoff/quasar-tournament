@@ -69,7 +69,7 @@ function FixedUpdate () {
 			ship_control_script.Thrust();
 		}
 		else if (distance_to_target < in_range) {
-			ship_control_script.Fire();
+			ship_control_script.Shoot();
 			ship_control_script.Stabilize();
 		}
 		else {
