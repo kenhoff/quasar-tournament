@@ -1,14 +1,15 @@
 #pragma strict
 
-public var ship_turn_force : float;
-public var ship_maneuver_force : float;
+// public var ship_turn_force : float;
+// public var ship_maneuver_force : float;
 
 public var ship_engine_object : GameObject;
 public var ship_weapon_root : GameObject;
 
 public var ship_shield_object : GameObject;
+public var ship_body_object : GameObject;
 
-public var accuracy : float;
+// public var accuracy : float;
 
 public var max_shield : float;
 public var max_armor : float;
@@ -35,9 +36,9 @@ private var is_player : boolean;
 
 function Start () {
 	shield_control_script = ship_shield_object.GetComponent(ShieldControl);
-	ship_shield_object.SetActive(false);
-	rigidbody.SetDensity(4.5);
-	ship_shield_object.SetActive(true);
+	
+	
+	
 	shield_health = max_shield;
 	armor_health = max_armor;
 	hull_health = max_hull;
@@ -45,9 +46,27 @@ function Start () {
 	if (transform.parent.gameObject.tag == "Player") {
 		is_player = true;
 	}
+
+
+	// Debug.Log("component : " + rigidbody);
+	// Debug.Log("mass during start, before setdensity: " + rigidbody.mass);
+
+	// ship_shield_object.SetActive(false);
+	ship_shield_object.collider.enabled = false; 
+
+	rigidbody.SetDensity(4.5);
+	// Debug.Log("mass during start, immediately after setdensity: " + rigidbody.mass);
+	
+	// ship_shield_object.SetActive(true);
+	ship_shield_object.collider.enabled = true;
+	// Debug.Log("mass at the end of start: " + rigidbody.mass);
 }
 
 function Update () {
+	// Debug.Log("mass at the start of update: " + rigidbody.mass);
+
+
+	// DON'T ENABLE/DISABLE THE SHIELD OBJECT (otherwise you'll get mass reset errors)
 
 	if (shield_health > max_shield) {
 		shield_health = max_shield;
@@ -55,13 +74,13 @@ function Update () {
 
 	if (shield_health <= 0) {
 		shield_health = 0;
-		if (ship_shield_object.activeSelf) {
-			ship_shield_object.SetActive(false);
+		if (ship_shield_object.collider.enabled) {
+			ship_shield_object.collider.enabled = false;
 		}
 	}
 
-	if ((shield_health > 0) && (!ship_shield_object.activeSelf)) {
-		ship_shield_object.SetActive(true);
+	if ((shield_health > 0) && (!ship_shield_object.collider.enabled)) {
+		ship_shield_object.collider.enabled = true;
 	}
 
 	if (shield_downtime >= shield_recharge_time) {
@@ -73,6 +92,8 @@ function Update () {
 	if (hull_health <= 0) {
 		Destroy();
 	}
+
+	// Debug.Log("mass at the end of update: " + rigidbody.mass);
 
 }
 
@@ -98,25 +119,25 @@ function OnCollisionEnter (collisionInfo : Collision) {
 }
 
 function Fire () {
-	for (var i = 0; i < ship_weapon_root.transform.childCount; i++) {
-		ship_weapon_root.transform.GetChild(i).GetComponent(WeaponControl).Shoot();
-	}
+	// for (var i = 0; i < ship_weapon_root.transform.childCount; i++) {
+	ship_weapon_root.GetComponent(WeaponControl).Shoot();
+	
 }
 
 function Thrust () {
-	ship_engine_object.GetComponent(EngineControl).Thrust();
+	ship_engine_object.GetComponent(EngineControl).EngineThrust();
 }
 
 function Rotate (change_heading : float) {
-	ship_engine_object.GetComponent(EngineControl).Rotate(change_heading);
+	ship_engine_object.GetComponent(EngineControl).EngineRotate(change_heading);
 }
 
 function Maneuver (horizontal_input : float, vertical_input : float) {
-	ship_engine_object.GetComponent(EngineControl).Maneuver(horizontal_input, vertical_input);
+	ship_engine_object.GetComponent(EngineControl).EngineManeuver(horizontal_input, vertical_input);
 }
 
 function Stabilize () {
-	ship_engine_object.GetComponent(EngineControl).Stabilize;
+	ship_engine_object.GetComponent(EngineControl).EngineStabilize();
 
 }
 	
