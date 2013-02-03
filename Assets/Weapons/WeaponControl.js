@@ -14,7 +14,6 @@ public class beam_parameters extends System.Object {
 	public var rate_of_fire : float;
 	public var range : float;
 	public var damage : float;
-	public var size : float;
 	public var accuracy : float;
 	public var count : int;
 	public var beam_width : float;
@@ -111,7 +110,6 @@ function WeaponShoot () {
 }
 
 function BeamShoot () {
-	var shots = new Array();
 	if (time_since_shot > time_between_shots) {
 		for (var i = 0; i < beam.count; i++) {
 			var exit_point = transform.position;
@@ -120,24 +118,11 @@ function BeamShoot () {
 			var shot = Instantiate(beam.prefab_object, exit_point, ship_object.transform.rotation);
 			shot.transform.eulerAngles.y += exit_angle;
 			shot.transform.parent = transform;
-			shot.transform.localScale = beam.size * Vector3.one;
 
-
-			if (shield_object.collider.enabled) {
-				Physics.IgnoreCollision(shot.collider, shield_object.collider);
-			}
-			Physics.IgnoreCollision(shot.collider, body_object.collider);
-			for (previous_shot in shots) {
-				Physics.IgnoreCollision(shot.collider, previous_shot.collider);
-			}
-			shots.push(shot);
-			var force = beam.exit_speed * shot.rigidbody.mass;
-			shot.rigidbody.velocity = ship_object.rigidbody.velocity;
-			shot.rigidbody.AddForce(force * shot.transform.forward, ForceMode.Impulse);
-			
-			shot.transform.GetComponent(PulseControl).range = beam.range;
-			shot.transform.GetComponent(PulseControl).exit_speed = beam.exit_speed;
-			shot.transform.GetComponent(PulseControl).payload = beam.payload;
+			shot.transform.GetComponent(BeamControl).range = beam.range;
+			shot.transform.GetComponent(BeamControl).life = beam.beam_life;
+			shot.transform.GetComponent(BeamControl).width = beam.beam_width;
+			shot.transform.GetComponent(BeamControl).damage = beam.damage;
 
 			time_since_shot = 0;
 		}

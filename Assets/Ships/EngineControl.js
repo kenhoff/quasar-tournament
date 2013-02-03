@@ -44,11 +44,28 @@ function EngineRotate (change_heading : float) {
 
 function EngineManeuver (horizontal_input : float, vertical_input : float) {
 	if (ship_object) {
-		ship_object.rigidbody.AddForce(Vector3.right * horizontal_input * maneuver_force * Time.deltaTime);
-		ship_object.rigidbody.AddForce(Vector3.forward * vertical_input * maneuver_force * Time.deltaTime);
+		var horizontal_force : Vector3 = Vector3.right * horizontal_input * maneuver_force * Time.deltaTime;
+		var vertical_force : Vector3 = Vector3.forward * vertical_input * maneuver_force * Time.deltaTime;
+		ship_object.rigidbody.AddForce(horizontal_force);
+		ship_object.rigidbody.AddForce(vertical_force);
 	}
 }
 
 function EngineStabilize () {
-	ship_object.rigidbody.AddForce(-ship_object.rigidbody.velocity * maneuver_force * .01);
+
+	var ship_velocity_magnitude = ship_object.rigidbody.velocity.magnitude;
+	var ship_velocity_direction = ship_object.rigidbody.velocity.normalized;
+	var ship_mass = ship_object.rigidbody.mass;
+
+	var max_vel_change = (maneuver_force * Time.deltaTime) / ship_mass;
+
+	// Debug.Log("max_vel_change: " + max_vel_change);
+	// Debug.Log("ship_velocity_magnitude: " + ship_velocity_magnitude);
+
+	if (max_vel_change > ship_velocity_magnitude) {
+		ship_object.rigidbody.AddForce(-ship_velocity_direction * (ship_velocity_magnitude * ship_mass));
+	}
+	else {
+		ship_object.rigidbody.AddForce(-ship_velocity_direction * maneuver_force * Time.deltaTime);
+	}
 }
