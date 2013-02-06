@@ -19,6 +19,6 @@ function Update () {
 	time_alive -= Time.deltaTime;
 }
 
-function OnCollisionEnter (collision : Collision) {
+function OnCollisionEnter () {
 	Destroy (gameObject);
 }

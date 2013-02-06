@@ -43,14 +43,21 @@ public class projectile_parameters extends System.Object {
 }
 
 public class missile_parameters extends System.Object {
+	public var prefab_object : GameObject;
 	public var exit_speed : float;
 	public var exit_accuracy : float;
-	public var max_thrust_force : float;
-	public var max_turn_force : float;
-	public var tracking : float; // ??????????????
+	public var thrust_force : float;
+	public var turn_force : float;
 	public var rate_of_fire : float;
 	public var payload : float;
-	public var missile_mass : float;
+	public var mass : float;
+	public var count : int;
+	public var size : float;
+	public var range : float;
+	public var fuel : float;
+	public var explosion_radius : float;
+	public var detection_radius : float;
+	public var explosion_force : float;
 }
 
 public var beam = beam_parameters();
@@ -104,6 +111,7 @@ function WeaponShoot () {
 			ProjectileShoot();
 			break;
 		case weapon_type.Missile:
+			MissileShoot();
 			break;
 	}
 	
@@ -145,7 +153,7 @@ function PulseShoot () {
 			if (shield_object.collider.enabled) {
 				Physics.IgnoreCollision(shot.collider, shield_object.collider);
 			}
-			Physics.IgnoreCollision(shot.collider, body_object.collider);
+			Physics.IgnoreCollision(shot.collider, ship_object.collider);
 			for (previous_shot in shots) {
 				Physics.IgnoreCollision(shot.collider, previous_shot.collider);
 			}
@@ -161,7 +169,6 @@ function PulseShoot () {
 			time_since_shot = 0;
 		}
 	}
-
 }
 
 function ProjectileShoot () {
@@ -181,7 +188,7 @@ function ProjectileShoot () {
 			if (shield_object.collider.enabled) {
 				Physics.IgnoreCollision(shot.collider, shield_object.collider);
 			}
-			Physics.IgnoreCollision(shot.collider, body_object.collider);
+			Physics.IgnoreCollision(shot.collider, ship_object.collider);
 			for (previous_shot in shots) {
 				Physics.IgnoreCollision(shot.collider, previous_shot.collider);
 			}
@@ -201,5 +208,44 @@ function ProjectileShoot () {
 }
 
 function MissileShoot () {
+	var shots = new Array();
+	if (time_since_shot > time_between_shots) {
+		for (var i = 0; i < missile.count; i++) {
+			var exit_point = transform.position;
+			var exit_angle = Random.Range(-missile.exit_accuracy, missile.exit_accuracy);
 
+			var shot = Instantiate(missile.prefab_object, exit_point, ship_object.transform.rotation);
+			shot.transform.eulerAngles.y += exit_angle;
+			shot.transform.parent = transform;
+			shot.transform.localScale = missile.size * Vector3.one;
+
+			shot.rigidbody.mass = missile.mass;
+
+			if (shield_object.collider.enabled) {
+				Physics.IgnoreCollision(shot.collider, shield_object.collider);
+			}
+			Physics.IgnoreCollision(shot.collider, ship_object.collider);
+			for (previous_shot in shots) {
+				Physics.IgnoreCollision(shot.collider, previous_shot.collider);
+			}
+			shots.push(shot);
+
+			var force = missile.exit_speed * missile.mass;
+			shot.rigidbody.velocity = ship_object.rigidbody.velocity;
+			shot.rigidbody.AddForce(force * shot.transform.forward, ForceMode.Impulse);
+			ship_object.rigidbody.AddForce(-force * shot.transform.forward, ForceMode.Impulse);
+			
+			var missile_control_script = shot.transform.GetComponent(MissileControl);
+			missile_control_script.fuel = missile.fuel;
+
+			missile_control_script.thrust_force = missile.thrust_force;
+			missile_control_script.turn_force = missile.turn_force;
+			missile_control_script.explosion_radius = missile.explosion_radius;
+			missile_control_script.payload = missile.payload;
+			missile_control_script.explosion_force = missile.explosion_force;
+			// shot.transform.GetComponent(MissileControl).exit_speed = missile.exit_speed;
+
+			time_since_shot = 0;
+		}
+	}
 }

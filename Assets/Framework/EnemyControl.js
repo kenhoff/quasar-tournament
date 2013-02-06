@@ -1,7 +1,13 @@
 #pragma strict
 
+public enum AIState {
+	Idle,
+	Chase,
+}
+
 public var ship_prefab : GameObject;
 public var target : Transform;
+public var faction : int;
 
 private var ship_control_script : ShipControl;
 
@@ -17,6 +23,8 @@ function Start () {
 	ship.transform.parent = transform;
 	ship.name = ship_prefab.name;
 	ship_control_script = ship.GetComponent(ShipControl);
+	ship.GetComponent(ShipFactionControl).faction = faction;
+
 
 }
 

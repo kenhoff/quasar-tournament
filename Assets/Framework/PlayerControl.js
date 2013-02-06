@@ -5,6 +5,7 @@ public var camera_object : GameObject;
 public var camera_zoom : float;
 public var camera_zoom_rate : float;
 public var follow_ship : boolean;
+public var faction : int;
 
 private var ship_control_script : ShipControl;
 
@@ -25,6 +26,7 @@ function CreateShip () {
 	ship.transform.parent = transform;
 	ship.name = ship_prefab.name;
 	ship_control_script = ship.GetComponent(ShipControl);
+	ship.GetComponent(ShipFactionControl).faction = faction;
 }
 
 function Update () {

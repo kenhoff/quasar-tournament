@@ -3,6 +3,8 @@
 // public var ship_turn_force : float;
 // public var ship_maneuver_force : float;
 
+public var faction : int;
+
 public var ship_engine_object : GameObject;
 public var ship_weapon_root : GameObject;
 
@@ -15,9 +17,9 @@ public var max_shield : float;
 public var max_armor : float;
 public var max_hull : float;
 
-private var shield_health : float;
-private var armor_health : float;
-private var hull_health : float;
+public var shield_health : float;
+public var armor_health : float;
+public var hull_health : float;
 
 public var shield_recharge_time : float;
 public var shield_recharge_rate : float;
@@ -108,7 +110,12 @@ function OnCollisionEnter (collisionInfo : Collision) {
 
 
 	var impact_velocity = collisionInfo.relativeVelocity.magnitude;
-	var impact_mass = collisionInfo.rigidbody.mass;
+	if (collisionInfo.rigidbody) {
+		var impact_mass = collisionInfo.rigidbody.mass;
+	}
+	else {
+		impact_mass = 0;
+	}
 	var impact_momentum = impact_velocity * impact_mass;
 
 	if (collisionInfo.gameObject.tag == "Pulse") {
