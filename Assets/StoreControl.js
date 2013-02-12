@@ -18,6 +18,8 @@ function Update () {
 		level -= 1;
 	}
 
+	Debug.Log(PlayerStats.ship_type);
+
 }
 
 function OnTriggerEnter (collider : Collider) {

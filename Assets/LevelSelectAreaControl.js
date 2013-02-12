@@ -13,6 +13,9 @@ function Start () {
 
 function Update () {
 	if (display_level_gui) {
+		if (Input.GetKeyDown(KeyCode.Return)) {
+			LevelChangeControl.StartLevel(level);
+		}
 		if (Input.GetKeyDown(KeyCode.RightBracket)) {
 			level += 1;
 		}
@@ -26,6 +29,9 @@ function Update () {
 			level = max_level_achieved + 1;
 		}
 	}
+
+	Debug.Log(PlayerStats.ship_type);
+
 
 }
 
