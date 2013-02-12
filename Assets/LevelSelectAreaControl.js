@@ -30,7 +30,7 @@ function Update () {
 		}
 	}
 
-	Debug.Log(PlayerStats.ship_type);
+	// Debug.Log(PlayerStats.ship_type);
 
 
 }
