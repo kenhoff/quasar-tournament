@@ -37,9 +37,10 @@ function SpawnShip (properties) {
 
 function FindAvailableSpawn () {
 	var spawns = GameObject.FindGameObjectsWithTag("Respawn");
-	while (true) {
-		var random_spawn = spawns[Mathf.Floor(Random.value * spawns.length)];
-		var sphere_hits = Physics.SphereCastAll(random_spawn.transform.position, safe_radius, Vector3.zero);
+	RandomizeArray(spawns);
+	for (var j = 0; j < spawns.length; j++) {
+		// var random_spawn = spawns[Mathf.Floor(Random.value * spawns.length)];
+		var sphere_hits = Physics.OverlapSphere(spawns[j].transform.position, safe_radius);
 		var hit : RaycastHit;
 		var spawn_ship_flag : boolean = true;
 		for (var i = 0; i < sphere_hits.length; i++) {
@@ -52,7 +53,7 @@ function FindAvailableSpawn () {
 		if (spawn_ship_flag) {
 			// spawn the ship
 			Debug.Log("found a place to spawn");
-			return random_spawn.transform.position;
+			return spawns[j].transform.position;
 		}
 
 	}
@@ -63,4 +64,15 @@ function FindAvailableSpawn () {
 
 static function AddToSpawnQueue (ship) {
 	spawn_queue.push(ship);
+}
+
+
+static function RandomizeArray(arr : Array)
+{
+    for (var i = arr.length - 1; i > 0; i--) {
+        var r = Random.Range(0,i);
+        var tmp = arr[i];
+        arr[i] = arr[r];
+        arr[r] = tmp;
+    }
 }
